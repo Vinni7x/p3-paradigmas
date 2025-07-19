@@ -1,0 +1,4 @@
+VeiculoPopular;Honda Civic;ABC-1234;2020;65,00
+VeiculoLuxo;BMW X5;XYZ-9876;2022;250,00
+VeiculoPopular;Toyota Corolla;DEF-5678;2019;70,00
+VeiculoLuxo;Mercedes-Benz C-Class;GHI-2468;2023;320,00
