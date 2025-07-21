@@ -302,12 +302,17 @@ public class SistemaLocadoraGUI extends JFrame {
             
             String resultado = String.format("Valor total: R$ %.2f (%d dias)", valor, dias);
             
-            // Adicionar informação se é veículo econômico
+            // Adicionar informação específica por tipo de veículo
             if (veiculo instanceof VeiculoPopular) {
                 VeiculoPopular popular = (VeiculoPopular) veiculo;
                 if (popular.isEconomico()) {
                     resultado += " - Veículo ECONÔMICO!";
                 }
+            } else if (veiculo instanceof VeiculoLuxo) {
+                VeiculoLuxo luxo = (VeiculoLuxo) veiculo;
+                double seguro = luxo.calcularSeguroPremium(dias);
+                double taxa = luxo.getTaxaLuxo();
+                resultado += String.format(" (Taxa: %.0f%%, Seguro: R$ %.2f)", taxa * 100, seguro);
             }
             
             lblResultadoCalculo.setText(resultado);
