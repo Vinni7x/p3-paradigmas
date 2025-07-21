@@ -300,7 +300,17 @@ public class SistemaLocadoraGUI extends JFrame {
             Veiculo veiculo = veiculos.get(selectedIndex);
             double valor = veiculo.calcularAluguel(dias);
             
-            lblResultadoCalculo.setText(String.format("Valor total: R$ %.2f (%d dias)", valor, dias));
+            String resultado = String.format("Valor total: R$ %.2f (%d dias)", valor, dias);
+            
+            // Adicionar informação se é veículo econômico
+            if (veiculo instanceof VeiculoPopular) {
+                VeiculoPopular popular = (VeiculoPopular) veiculo;
+                if (popular.isEconomico()) {
+                    resultado += " - Veículo ECONÔMICO!";
+                }
+            }
+            
+            lblResultadoCalculo.setText(resultado);
             
         } catch (NumberFormatException ex) {
             lblResultadoCalculo.setText("Número de dias deve ser um valor válido");
