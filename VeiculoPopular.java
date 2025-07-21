@@ -21,4 +21,13 @@ public class VeiculoPopular extends Veiculo {
     public boolean isEconomico() {
         return valorDiaria < 80.0;
     }
+    
+    @Override
+    public String toString() {
+        String base = super.toString();
+        if (isEconomico()) {
+            return base + " [ECONÔMICO]";
+        }
+        return base;
+    }
 }
