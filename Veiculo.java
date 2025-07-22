@@ -3,6 +3,7 @@ public abstract class Veiculo {
     protected String placa;
     protected int ano;
     protected double valorDiaria;
+    protected EstrategiaCalculo estrategiaCalculo;
     
     public Veiculo(String modelo, String placa, int ano, double valorDiaria) {
         this.modelo = modelo;
@@ -11,8 +12,29 @@ public abstract class Veiculo {
         this.valorDiaria = valorDiaria;
     }
     
-    // Método abstrato que deve ser implementado pelas subclasses
-    public abstract double calcularAluguel(int dias);
+    /**
+     * Calcula o aluguel utilizando a estratégia configurada
+     */
+    public double calcularAluguel(int dias) {
+        if (estrategiaCalculo == null) {
+            throw new IllegalStateException("Estratégia de cálculo não configurada");
+        }
+        return estrategiaCalculo.calcularAluguel(dias, valorDiaria);
+    }
+    
+    /**
+     * Define a estratégia de cálculo a ser utilizada
+     */
+    public void setEstrategiaCalculo(EstrategiaCalculo estrategiaCalculo) {
+        this.estrategiaCalculo = estrategiaCalculo;
+    }
+    
+    /**
+     * Retorna a estratégia de cálculo configurada
+     */
+    public EstrategiaCalculo getEstrategiaCalculo() {
+        return estrategiaCalculo;
+    }
     
     // Getters e Setters
     public String getModelo() {

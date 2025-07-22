@@ -3,11 +3,10 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SistemaLocadoraGUI extends JFrame {
-    private List<Veiculo> veiculos;
+public class SistemaLocadoraGUI extends JFrame implements VeiculoObserver {
+    private VeiculoController controller;
     private DefaultListModel<Veiculo> listModel;
     
     // Componentes da interface
@@ -24,10 +23,12 @@ public class SistemaLocadoraGUI extends JFrame {
     private JLabel lblResultadoCalculo;
     
     public SistemaLocadoraGUI() {
+        controller = new VeiculoController();
+        controller.adicionarObserver(this); // Registra a GUI como observer
+        
         initializeComponents();
         setupLayout();
         setupEventListeners();
-        carregarDados();
     }
     
     private void initializeComponents() {
@@ -38,7 +39,6 @@ public class SistemaLocadoraGUI extends JFrame {
         setLocationRelativeTo(null);
         
         // Inicializar dados
-        veiculos = new ArrayList<>();
         listModel = new DefaultListModel<>();
         
         // Campos de entrada
@@ -62,6 +62,22 @@ public class SistemaLocadoraGUI extends JFrame {
         // Campo para dias de aluguel
         txtDias = new JTextField(10);
         lblResultadoCalculo = new JLabel("Selecione um veículo e informe os dias");
+        
+        // Inicializa a lista de veículos a partir do controller
+        atualizarListaVeiculos();
+    }
+    
+    // Implementação da interface VeiculoObserver
+    @Override
+    public void atualizar(List<Veiculo> veiculos) {
+        atualizarListaVeiculos();
+    }
+    
+    private void atualizarListaVeiculos() {
+        listModel.clear();
+        for (Veiculo veiculo : controller.getVeiculos()) {
+            listModel.addElement(veiculo);
+        }
     }
     
     private void setupLayout() {
@@ -216,35 +232,20 @@ public class SistemaLocadoraGUI extends JFrame {
                 return;
             }
             
-            // Verificar se a placa já existe
-            for (Veiculo v : veiculos) {
-                if (v.getPlaca().equalsIgnoreCase(placa)) {
-                    JOptionPane.showMessageDialog(this, "Já existe um veículo com esta placa!", 
-                                                "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
+            // Criar veículo usando o Factory
+            Veiculo novoVeiculo = VeiculoFactory.criarVeiculo(tipo, modelo, placa, ano, valorDiaria);
             
-            // Criar veículo baseado no tipo
-            Veiculo novoVeiculo;
-            if (tipo.equals("Popular")) {
-                novoVeiculo = new VeiculoPopular(modelo, placa, ano, valorDiaria);
+            // Adicionar o veículo via controller
+            boolean sucesso = controller.adicionarVeiculo(novoVeiculo);
+            
+            if (sucesso) {
+                limparCampos();
+                JOptionPane.showMessageDialog(this, "Veículo adicionado com sucesso!", 
+                                            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                novoVeiculo = new VeiculoLuxo(modelo, placa, ano, valorDiaria);
+                JOptionPane.showMessageDialog(this, "Já existe um veículo com esta placa!", 
+                                            "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            
-            // Adicionar à lista
-            veiculos.add(novoVeiculo);
-            listModel.addElement(novoVeiculo);
-            
-            // Salvar no arquivo
-            GerenciadorArquivos.salvarVeiculos(veiculos);
-            
-            // Limpar campos
-            limparCampos();
-            
-            JOptionPane.showMessageDialog(this, "Veículo adicionado com sucesso!", 
-                                        "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Ano e valor da diária devem ser números válidos!", 
@@ -266,14 +267,16 @@ public class SistemaLocadoraGUI extends JFrame {
                                                   JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            Veiculo veiculoRemovido = veiculos.remove(selectedIndex);
-            listModel.removeElementAt(selectedIndex);
+            // Remover veículo via controller
+            boolean sucesso = controller.removerVeiculoPorIndice(selectedIndex);
             
-            // Salvar no arquivo
-            GerenciadorArquivos.salvarVeiculos(veiculos);
-            
-            JOptionPane.showMessageDialog(this, "Veículo removido com sucesso!", 
-                                        "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            if (sucesso) {
+                JOptionPane.showMessageDialog(this, "Veículo removido com sucesso!", 
+                                            "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao remover veículo!", 
+                                            "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
@@ -297,10 +300,13 @@ public class SistemaLocadoraGUI extends JFrame {
                 return;
             }
             
-            Veiculo veiculo = veiculos.get(selectedIndex);
-            double valor = veiculo.calcularAluguel(dias);
+            // Obter o veículo do controller
+            Veiculo veiculo = controller.getVeiculoPorIndice(selectedIndex);
             
-            lblResultadoCalculo.setText(String.format("Valor total: R$ %.2f (%d dias)", valor, dias));
+            if (veiculo != null) {
+                double valor = veiculo.calcularAluguel(dias);
+                lblResultadoCalculo.setText(String.format("Valor total: R$ %.2f (%d dias)", valor, dias));
+            }
             
         } catch (NumberFormatException ex) {
             lblResultadoCalculo.setText("Número de dias deve ser um valor válido");
@@ -313,14 +319,6 @@ public class SistemaLocadoraGUI extends JFrame {
         txtAno.setText("");
         txtValorDiaria.setText("");
         cmbTipoVeiculo.setSelectedIndex(0);
-    }
-    
-    private void carregarDados() {
-        veiculos = GerenciadorArquivos.carregarVeiculos();
-        listModel.clear();
-        for (Veiculo veiculo : veiculos) {
-            listModel.addElement(veiculo);
-        }
     }
     
     public static void main(String[] args) {

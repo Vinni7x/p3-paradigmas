@@ -2,23 +2,24 @@ public class VeiculoPopular extends Veiculo {
     
     public VeiculoPopular(String modelo, String placa, int ano, double valorDiaria) {
         super(modelo, placa, ano, valorDiaria);
+        this.estrategiaCalculo = new EstrategiaCalculoPopular();
     }
     
-    @Override
-    public double calcularAluguel(int dias) {
-        // Veículos populares têm desconto para locações longas
-        double valor = valorDiaria * dias;
-        
-        // Desconto de 5% para locações de 7 dias ou mais
-        if (dias >= 7) {
-            valor *= 0.95;
-        }
-        
-        return valor;
+    /**
+     * Obtém o calculador popular configurado para este veículo
+     * 
+     * @return A estratégia de cálculo para veículos populares
+     */
+    public EstrategiaCalculoPopular getCalculadorPopular() {
+        return (EstrategiaCalculoPopular) estrategiaCalculo;
     }
     
-    // Método específico para veículos populares
+    /**
+     * Verifica se o veículo é considerado econômico
+     * 
+     * @return true se for econômico, false caso contrário
+     */
     public boolean isEconomico() {
-        return valorDiaria < 80.0;
+        return getCalculadorPopular().isEconomico(valorDiaria);
     }
 }

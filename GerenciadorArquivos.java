@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe responsável pelo armazenamento persistente dos veículos
+ * Implementando o padrão DAO
+ */
 public class GerenciadorArquivos {
     private static final String NOME_ARQUIVO = "veiculos.txt";
     
@@ -51,11 +55,8 @@ public class GerenciadorArquivos {
             int ano = Integer.parseInt(partes[3]);
             double valorDiaria = Double.parseDouble(partes[4]);
             
-            if (tipo.equals("VeiculoPopular")) {
-                return new VeiculoPopular(modelo, placa, ano, valorDiaria);
-            } else if (tipo.equals("VeiculoLuxo")) {
-                return new VeiculoLuxo(modelo, placa, ano, valorDiaria);
-            }
+            // Usar o factory para criar o veículo
+            return VeiculoFactory.criarVeiculo(tipo, modelo, placa, ano, valorDiaria);
             
         } catch (NumberFormatException e) {
             System.err.println("Erro ao parsear linha: " + linha);

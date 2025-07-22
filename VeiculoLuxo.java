@@ -1,28 +1,35 @@
 public class VeiculoLuxo extends Veiculo {
-    private static final double TAXA_LUXO = 0.15; // 15% de taxa adicional
-    private static final double SEGURO_PREMIUM = 25.0; // Seguro premium por dia
     
     public VeiculoLuxo(String modelo, String placa, int ano, double valorDiaria) {
         super(modelo, placa, ano, valorDiaria);
+        this.estrategiaCalculo = new EstrategiaCalculoLuxo();
     }
     
-    @Override
-    public double calcularAluguel(int dias) {
-        // Veículos de luxo têm taxa adicional e seguro premium
-        double valorBase = valorDiaria * dias;
-        double taxaLuxo = valorBase * TAXA_LUXO;
-        double seguro = SEGURO_PREMIUM * dias;
-        
-        return valorBase + taxaLuxo + seguro;
+    /**
+     * Obtém o calculador de luxo configurado para este veículo
+     * 
+     * @return A estratégia de cálculo para veículos de luxo
+     */
+    public EstrategiaCalculoLuxo getCalculadorLuxo() {
+        return (EstrategiaCalculoLuxo) estrategiaCalculo;
     }
     
-    // Método específico para veículos de luxo
+    /**
+     * Calcula o valor do seguro premium para o período especificado
+     * 
+     * @param dias Quantidade de dias
+     * @return Valor do seguro premium
+     */
     public double calcularSeguroPremium(int dias) {
-        return SEGURO_PREMIUM * dias;
+        return getCalculadorLuxo().calcularSeguroPremium(dias);
     }
     
-    // Método específico para obter a taxa de luxo aplicada
+    /**
+     * Obtém a taxa de luxo aplicada
+     * 
+     * @return Percentual da taxa de luxo
+     */
     public double getTaxaLuxo() {
-        return TAXA_LUXO;
+        return getCalculadorLuxo().getTaxaLuxo();
     }
 }
