@@ -1,3 +1,8 @@
+package src.factory;
+import src.model.Veiculo;
+import src.model.VeiculoLuxo;
+import src.model.VeiculoPopular;
+
 /**
  * Factory para criação de veículos
  * Implementando o padrão Factory Method

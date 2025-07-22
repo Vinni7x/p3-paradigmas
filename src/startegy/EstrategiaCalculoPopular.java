@@ -1,3 +1,4 @@
+package src.startegy;
 /**
  * Implementação da estratégia de cálculo para veículos populares
  * Parte do padrão Strategy

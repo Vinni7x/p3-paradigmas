@@ -1,4 +1,7 @@
+package src.controller;
 import java.util.List;
+
+import src.model.Veiculo;
 
 /**
  * Interface Observer para notificar sobre mudanças na lista de veículos

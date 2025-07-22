@@ -1,5 +1,9 @@
+package src.controller;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.model.Veiculo;
+import src.util.GerenciadorArquivos;
 
 /**
  * Controlador para gerenciar operações com veículos

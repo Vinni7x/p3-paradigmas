@@ -1,3 +1,4 @@
+package src.startegy;
 /**
  * Interface que define a estratégia de cálculo do valor de aluguel
  * Implementando o padrão Strategy

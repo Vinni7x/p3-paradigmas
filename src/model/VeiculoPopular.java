@@ -1,3 +1,6 @@
+package src.model;
+import src.startegy.EstrategiaCalculoPopular;
+
 public class VeiculoPopular extends Veiculo {
     
     public VeiculoPopular(String modelo, String placa, int ano, double valorDiaria) {

@@ -1,5 +1,12 @@
+package src.view;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
+import src.controller.VeiculoController;
+import src.controller.VeiculoObserver;
+import src.factory.VeiculoFactory;
+import src.model.Veiculo;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

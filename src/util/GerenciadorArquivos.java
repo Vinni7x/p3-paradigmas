@@ -1,6 +1,10 @@
+package src.util;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.factory.VeiculoFactory;
+import src.model.Veiculo;
 
 /**
  * Classe responsável pelo armazenamento persistente dos veículos

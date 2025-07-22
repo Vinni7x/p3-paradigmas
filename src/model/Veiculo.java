@@ -1,3 +1,7 @@
+package src.model;
+
+import src.startegy.EstrategiaCalculo;
+
 public abstract class Veiculo {
     protected String modelo;
     protected String placa;
