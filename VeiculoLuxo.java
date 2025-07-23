@@ -16,13 +16,4 @@ public class VeiculoLuxo extends Veiculo {
         return valorBase + taxaLuxo + seguro;
     }
     
-    // Método específico para veículos de luxo
-    public double calcularSeguroPremium(int dias) {
-        return SEGURO_PREMIUM * dias;
-    }
-    
-    // Método específico para obter a taxa de luxo aplicada
-    public double getTaxaLuxo() {
-        return TAXA_LUXO;
-    }
 }
