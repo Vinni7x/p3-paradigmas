@@ -17,8 +17,4 @@ public class VeiculoPopular extends Veiculo {
         return valor;
     }
     
-    // Método específico para veículos populares
-    public boolean isEconomico() {
-        return valorDiaria < 80.0;
-    }
 }
