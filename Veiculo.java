@@ -49,8 +49,8 @@ public abstract class Veiculo {
     
     @Override
     public String toString() {
-        return String.format("%s - %s (%d) - R$ %.2f/dia", 
-                           getClass().getSimpleName(), modelo, ano, valorDiaria);
+        return String.format("%s - %s (%d) - %s- R$ %.2f/dia", 
+                           getClass().getSimpleName(), modelo, ano, placa, valorDiaria);
     }
     
     // Método para serializar os dados para arquivo
